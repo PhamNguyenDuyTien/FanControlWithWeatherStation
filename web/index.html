@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Cuối kỳ</title>
+    <link rel="stylesheet" h>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.3/bootstrap-icons.svg"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"></script>
+    <style>
+        *{padding: 0; margin: 0; box-sizing: border-box;}
+        html{font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;}
+        body{background: #000; position: relative;}
+        header{height: 60px;}
+        i{color: #fff; width: 16px; height: 16px;}
+        table{width: 100%;}
+        td{text-align: center;}
+        h1{color: #fff; text-transform: uppercase;}
+        h2{font-size: 16px; padding-bottom: 10px;}
+        td{font-size: 40px;}
+        button{width: 140px; padding: 20px 0; border: 2px solid #000; border-radius: 10px; background: #ccc; font-size: 25px;}
+        button:hover{opacity: 0.5; cursor: pointer;}
+        .database table{width: 100%; margin: 0 auto;}
+        .database tr,.database th,.database td{border-bottom: 1px solid grey; padding: 10px;}
+        .flex{display: flex;}
+        .block{display: block;}
+        .main{padding-top: 2px;}
+        .bg{ background: #3B3B3B;}
+        .container{max-width: 1400px; margin: 0 auto;}
+        .form{padding-top: 40px;}
+        .pos-center{position: relative;}
+        #level_pm25{position: absolute; top: 1px; right: 10px;}
+        .row{display: flex;}
+        .mb-10{margin-bottom: 10px;}
+        .col{color: #fff; width: 50%; height: 200px ; padding: 10px; border-radius: 10px; border: 3px solid #000; display: flex; justify-content: center; align-items: center; }
+        .col1{width: 1000px; height: 200px ; padding: 10px; background: #fff; border-radius: 10px; border: 3px solid #000; display: flex; justify-content: center; align-items: center; }
+        .mr-10{margin-right: 10px;}
+        .w-50{width: 50%;}
+        .w-35{width: 27%;}
+        .w-65{width: 73%;}
+        .h-350{height: 350px;}
+        .w-100{width: 100%;}
+        .center{text-align: center;}
+        .header-center{display: flex; justify-content: center; align-items: center;}
+        #clock{position: absolute; top: 10px; right: 110px; display: inline; width: 50px; font-size: 30px; font-weight: 900; color: rgb(255, 255, 255);height: 30px;}
+        .control{height: 200px; padding: 16px; width: 500px; border-radius: 10px; position: relative;}
+        .radio {margin: 0 15px 10px 15px; height: 30px; text-align: center; display: flex; justify-content: space-evenly; font-size: 30px;}
+        .radio .group{margin-right: 15px;}
+        .radio label{color: #000;}
+        .radio input{height: 18px; margin-right: 10px;}
+        .button input{padding: 10px; font-size: 25px; border-radius: 10px; background: #000; color: #fff; width: 95px;}
+        .button input:hover{opacity: 0.5; cursor: pointer;}
+        .database{border-radius: 10px; padding: 10px; background: #DDC394; color: #000; width: 200px}
+        .display{height:200px; width:200px;}
+        .toggle{display: inline-block; height: 34px; position: relative; width: 60px;}
+        .toggle input[type="checkbox"]{display: none;}
+        .toggle .slider{background-color: #ccc; cursor: pointer; width: 100%; height: 100%; transition: .4s; position: relative; border-radius: 50px;}
+        .toggle .slider:before {background-color: #fff; bottom: 4px; content: ""; height: 26px; left: 4px; position: absolute; transition: .4s; width: 26px; border-radius: 50px;}
+        .toggle input[type="checkbox"]:checked + .slider {background-color: #07a787;}
+        .toggle input[type="checkbox"]:checked + .slider:before {transform: translateX(26px);}
+        .edit{position: absolute; top: 60px; right: 90px;}
+        /* .edit.active{display: block;} */
+        .edit a{padding: 10px; background: #ccc; border-radius: 5px;}
+        .modal{position: fixed; top: 0; right: 0; left: 0; bottom: 0; background: rgba(0, 0, 0, 0.3); display: none; align-items: center; justify-content: center;}
+        .modal label{color: #000;}
+        .modal.open{display: block;}
+        .modal-container{font-family:Arial; margin: 100px auto; border: 5px; background: #fff; width: 500px; max-width: calc(100% - 32px); min-height: 200px; height: 400px; position: relative; animation: modalFadeIn ease 0.5s;}
+        .modal-header{background: #272F69; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #fff; margin: 0;}
+        .modal-close{position: absolute; right: 0; top: 0; color: #fff; padding: 5px; cursor: pointer;}
+        .modal-close:hover{background: #ccc; color: #000;}
+        .modal-body {padding: 16px;}
+        .modal-label {display: block; font-size: 15px; margin-bottom: 12px;}
+        .modal-input {border: 1px solid #ccc; width: 100%; font-size: 15px; padding: 10px; margin-bottom: 24px;}
+        @keyframes modalFadeIn {from {opacity: 0.5; transform: translateY(-150px);}to {transform: translateY(0);}}
+    </style>
+</head>
+
+
+<body onload="realTime()">
+    <header class="header-center">
+        <h1>WEATHER STATION</h1>
+    </header>
+    <div>
+        <span id="clock"></span>
+    </div>
+    <div class="main w-100 flex">
+        <div class="container">
+            <!-- ================================= CONTROL FAN ============================================= -->
+            <div class="flex" style="justify-content: center; margin-bottom: 10px;">
+                <div class="form">
+                    <div class="col w-100" id="form-control">
+                        <div class="control block" style="background: #fff">
+                            <div class="title">
+                                <h1 class="center" style="color: #000;">Control Fan</h1>
+                            </div>
+
+                            <div class="flex center" style="display:flex; justify-content: space-around; border-radius:10px;">
+                                <div class="button text-center">
+                                    <div class="input flex">
+                                        <h3 style="color: #000; margin-right: 10px; line-height: 35px;">Manual</h3>
+                                        <label class="toggle" for="toggle">
+                                            <input type="checkbox" id="toggle" name="setup-mode" onchange="updateMode()">
+                                            <div class="slider"></div>
+                                        </label>
+                                        <h3 style="color: #000; margin-left: 10px; line-height: 35px;">Automatic</h3>
+                                        <div class="edit">
+                                            <a href="#modal" type="button" class="edit-auto">
+                                                <i class="fa-solid fa-pen-to-square" style="color: #000;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="radio center flex">
+                                <div class="group">
+                                    <input type="radio" id="mode0" name="mode" value="0"><label for="mode0">0 (OFF)</label>
+                                </div>
+                                <div class="group">
+                                    <input type="radio" id="mode1" name="mode" value="1"><label for="mode1">1</label>
+                                </div>
+                                <div class="group">
+                                    <input type="radio" id="mode2" name="mode" value="2"><label for="mode2">2</label>
+                                </div>
+                                <div class="group">
+                                    <input type="radio" id="mode3" name="mode" value="3"><label for="mode3">3</label>
+                                </div>
+                            </div>
+                            <div class="button center">
+                                <input id="btnSubmit" value="Active" onclick="updateLevel()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="database">
+                    <h2 class="center" style="font-size: 23px; margin-bottom: 27px">CURRENT MODE</h2>
+                    <table>
+                        <tr>
+                            <th scope="col">Level</th>
+                            <td id="td1"></td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Mode</th>
+                            <td id="td2"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="database" style="margin-left: 10px;">
+                    <h2 class="center" style="font-size: 23px;">AUTO RANGE TEMPERATURE</h2>
+                    <table>
+                        <tr>
+                            <th scope="col">Range 1</th>
+                            <td id="temp1"></td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Range 2</th>
+                            <td id="temp2"></td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Range 3</th>
+                            <td id="temp3"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- ================================= Nồng độ bụi ============================================= -->
+            <div class="header flex w-100 mb-10">
+                <div class="w-35 flex">
+                    <div class="col pos-center h-350 bg">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><h2><i class="fa-solid fa-temperature-arrow-up"></i>&nbsp;PM2.5&nbsp; (&micro;m/m<sup>3</sup>)</h2></th>
+                                    <th><span id="level_pm25"></span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span id="pm25"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col h-350 bg">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><h2><i class="fa-solid fa-temperature-arrow-up"></i>&nbsp;PM10&nbsp; (&micro;m/m<sup>3</sup>)</h2></th>
+                                    <th><span id="level_pm10"></span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span id="pm10"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col1 w-65 h-350">
+                    <div class="chart">
+                        <canvas id="myChart" height="300px" width="950px" color="#fff"></canvas>
+                        <div class="w-100">
+                            <h3 class="center">Indoor Air Quality</h3>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+
+            <!-- ================================= Nhiệt độ ============================================= -->
+            <div class="row mb-10">
+                <div class="w-35 flex">
+                    <div class="col h-350 bg">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><h2><i class="fa-solid fa-temperature-high"></i>&nbsp;TEMPERATURE</h2></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span id="temp"></span>&deg;C</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col h-350 bg">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><h2><i class="fa-solid fa-droplet"></i>&nbsp;HUMIDITY</h2></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span id="humid"></span> %</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col1 h-350 w-65">
+                    <div class="chart">
+                        <canvas id="myChart1" height="300px" width="950px"></canvas>
+                        <div class="w-100">
+                            <h3 class="center">Temperature - Humidity</h3>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+
+            <!-- ================================= MODAL ============================================= -->
+            <form id="modal" class="modal">
+                <div class="modal-container">
+                    <div class="modal-close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </div>
+                    <header class="modal-header">
+                        <span>Edit temperature</span>
+                    </header>
+
+                    <div class="modal-body">
+                        <div class="text-label">
+                            <label for="range1" class="modal-range1">
+                                <i class="fa-solid fa-temperature-high"></i>
+                                <strong>Range 1:</strong>
+                            </label>
+                        </div>
+                        <div class="input">
+                            <input type="number" id="temp-range1" name="temp-range1" class="modal-input" placeholder="Khoảng nhiệt độ 1">
+                        </div>
+
+                        <div class="text-label">
+                            <label for="range2" class="modal-range2">
+                                <i class="fa-solid fa-temperature-high"></i>
+                                <strong>Range 2:</strong>
+                            </label>
+                        </div>
+                        <div class="input">
+                            <input type="number" id="temp-range2" name="temp-range2" class="modal-input" placeholder="Khoảng nhiệt độ 2">
+                        </div>
+
+                        <div class="text-label">
+                            <label for="range3" class="modal-range3">
+                                <i class="fa-solid fa-temperature-high"></i>
+                                <strong>Range 3:</strong>
+                            </label>
+                        </div>
+                        <div class="input">
+                            <input type="number" id="temp-range3" name="temp-range3" class="modal-input" placeholder="Khoảng nhiệt độ 3">
+                        </div>
+                    </div>
+                    <div class="button" style="position: absolute; bottom: 20px; right: 200px;">
+                        <input type="submit" value="Edit">
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+
+<!-- GRAPH -->
+    <script>
+        // GRAPH 1
+        var labelPM = [];
+        var pm25 = [];
+        var pm10 = [];
+
+        const chartdata = {
+        labels: labelPM,
+            datasets: [
+            {
+                label: 'PM2.5',
+                backgroundColor: 'rgb(255, 155, 0)',
+                borderColor: 'rgb(255, 155, 0)',
+                data: pm25
+            },
+
+            {
+                label: 'PM10',
+                backgroundColor: 'rgb(255, 0, 0)',
+                borderColor: 'rgb(255, 0, 0)',
+                data: pm10
+            },
+
+            ]
+        };
+        const config = {
+            type: 'line',
+            data: chartdata,
+            options: {
+                animation:false
+            }
+        };
+        var myChartPM = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+
+        var aPM25;
+        var bPM10;
+
+        // load data tu database
+        $(document).ready(function(){
+            updateChart_pm();
+        });
+        setInterval(updateChart_pm,1000);
+        function updateChart_pm(){
+            // gui request xuong database de lay data
+            $.post('readData.php',function(data){
+                var labelPM = [];
+                var pm25 = [];
+                var pm10 = [];
+                for(var i in data){
+                    labelPM.push(data[i].stt);
+                    pm25.push(data[i].pm25);
+                    // aPM25 = Math.round((pm25.slice(-1))*100/56);
+                    document.getElementById("pm25").innerHTML = pm25.slice(-1);  
+
+                    pm10.push(data[i].pm10);                    
+                    // bPM10 = Math.round((pm10.slice(-1))*100/255);
+                    document.getElementById("pm10").innerHTML = pm10.slice(-1);
+                }
+                console.log(pm25);
+                myChartPM.data.labels = labelPM;
+                myChartPM.data.datasets[0].data = pm25;
+                myChartPM.data.datasets[1].data = pm10;
+                myChartPM.update();
+            })
+        }
+    </script>
+
+    <!-- GRAPH TEMP - HUMID -->
+    <script>
+        var labelTH = [];
+        var temp = [];
+        var humid = [];
+        
+        const chartdata1 = {
+        labels: labelTH,
+            datasets: [
+            {
+                label: 'Temperature',
+                backgroundColor: 'rgb(99, 255, 132)',
+                borderColor: 'rgb(99, 255, 132)',
+                data: temp,
+            },
+
+            {
+                label: 'Humidity',
+                backgroundColor: 'rgb(0, 120, 215)',
+                borderColor: 'rgb(0, 120, 215)',
+                data: humid,
+            },
+
+            ]
+        };
+        const config1 = {
+            type: 'line',
+            data: chartdata1,
+            options: {
+                animation:false
+            }
+        };
+        var myChartTeHu = new Chart(
+            document.getElementById('myChart1'),
+            config1
+        );
+
+        // load data tu database
+        $(document).ready(function(){
+            updateChart_TeHu();
+        });
+        setInterval(updateChart_TeHu,1000);
+        function updateChart_TeHu(){
+            // gui request xuong database de lay data
+            $.post('readData.php',function(data){
+                var labelTH = [];
+                var temp = [];
+                var humid = [];
+                for(var i in data){
+                    labelTH.push(data[i].stt);
+                    temp.push(data[i].temp);
+                    humid.push(data[i].humid);
+                    document.getElementById("temp").innerHTML = temp.slice(-1);
+                    document.getElementById("humid").innerHTML = humid.slice(-1);
+                }
+                myChartTeHu.data.labels = labelTH;
+                myChartTeHu.data.datasets[0].data = temp;
+                myChartTeHu.data.datasets[1].data = humid;
+                myChartTeHu.update();
+            })
+        }
+    </script>
+
+    <!-- CLOCK -->
+    <script>
+        function realTime(){
+            var realtime = new Date();
+            var hour = realtime.getHours();
+            var min = realtime.getMinutes();
+            var sec = realtime.getSeconds();
+        
+            hour = ("0" + hour).slice(-2);
+            min = ("0" + min).slice(-2);
+            sec = ("0" + sec).slice(-2);
+        
+            document.getElementById('clock').innerHTML = hour + ":" + min + ":" + sec;
+            var t = setTimeout(realTime,1000);
+        }
+    </script>
+
+
+    <!-- =========================== Thay đổi nhiệt độ =================================== -->
+    <script>
+        $(document).ready(function(){
+            $(document).on('submit','#modal',function(){                
+                $.post("./addDataTemp.php",$('#modal').serialize())
+                alert("Chuyển đổi thành công!");
+            });
+            return false;
+        });
+    </script>
+
+    <!-- ============================ Javascript BẢNG GIÁ TRỊ MODE =============================== -->
+    <script>
+        $(document).ready(function(){
+            updateTable();
+        });
+
+        function updateTable(){
+            // Yêu cầu server gọi file getData.php
+            $.post("getData.php",
+            function(data){
+                var td1 = data[0].fanMode;
+                var td2 = data[0].fanLevel;
+                if(td1 == 0){
+                    document.getElementById("td1").innerHTML = 'M';
+                    $("#toggle").prop("checked", false);
+                }
+                else if(td1 == 1){
+                    document.getElementById("td1").innerHTML = 'A';
+                    $("#toggle").prop("checked", true);
+                }
+                document.getElementById("td2").innerHTML = td2;
+                $("input[name='mode'][value=" + td2 + "]").prop('checked', true);
+
+            })
+        }
+    </script>
+
+    <!-- ============================ Javascript BẢNG GIÁ TRỊ KHOẢNG NHIỆT ĐỘ =============================== -->
+    <script>
+        $(document).ready(function(){
+            updateTempRange();
+        });
+
+        function updateTempRange(){
+            // Yêu cầu server gọi file getData.php
+            $.post("getDataTemp.php",
+            function(data){
+                var temp1 = data[0].range1;
+                var temp2 = data[0].range2;
+                var temp3 = data[0].range3;
+                with(document){
+                    getElementById("temp1").innerHTML = temp1;
+                    getElementById("temp2").innerHTML = temp2;
+                    getElementById("temp3").innerHTML = temp3;
+                };
+            })
+        }
+    </script>
+
+    <!-- ============================ Javascript Thay đổi Mode auto - manual =============================== -->
+    <script>
+
+        const edit = document.querySelector('.edit-auto');
+        const modal = document.querySelector('.modal');
+        const modalContainer = document.querySelector('.modal-container');
+        const modalClose = document.querySelector('.modal-close');
+
+
+        function showModal(){
+            modal.classList.add('open');
+        }
+
+        function hideModal(){
+            modal.classList.remove('open');
+        }
+
+        function closeModal(event){
+            event.stopPropagation();
+        }
+
+        edit.addEventListener('click',showModal);
+        modalClose.addEventListener('click',hideModal);
+        modal.addEventListener('click',hideModal);
+        modalContainer.addEventListener('click',closeModal);
+
+        function updateMode(){
+            var checked = document.getElementById('toggle').checked;
+            $.post("addData.php?act=ChangeMode&mode="+checked, function(data){
+                location.reload();
+            })
+        }
+
+        function updateLevel(){
+            
+            var level = $('input[name="mode"]:checked').val();
+            $.post("addData.php?act=ChangeLevel&level="+level, function(data){
+                location.reload();
+            })
+        }
+    </script>
+</body>
+</html>
