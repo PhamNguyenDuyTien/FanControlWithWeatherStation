@@ -1,4 +1,4 @@
-# Fan Control With Weather Station
+# Using sensor SDS011 to measure fine dust, sensor SI7021 measures temperature and humidity, controls and monitors on the website.
 
  **Đây là project môn học IoT và nhúng.**
 - Cảm biến SDS011 đọc nồng độ bụi mịn PM2.5 và PM10.
