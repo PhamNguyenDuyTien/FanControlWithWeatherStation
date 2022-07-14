@@ -1,4 +1,4 @@
-# FanControlWithWeatherStation
+# Fan Control With Weather Station
 
  **Đây là project môn học IoT và nhúng.**
 - Cảm biến SDS011 đọc nồng độ bụi mịn PM2.5 và PM10.
